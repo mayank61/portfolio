@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{ profile.name }} — Portfolio</title>
+
+    <!-- Tailwind CDN for quick styling (good for demos). For production install Tailwind properly. -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  </head>
+
+  
+  <body class="bg-gray-50 text-gray-900 antialiased">
+    <header class="bg-white shadow-sm">
+      <div class="max-w-5xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="rounded-full bg-indigo-600 w-12 h-12 flex items-center justify-center text-white font-semibold">MT</div>
+          <div>
+            <h1 class="text-xl font-semibold">{{ profile.name }}</h1>
+            <p class="text-sm text-gray-500">{{ profile.title }}</p>
+          </div>
+        </div>
+        <nav class="flex gap-4 text-sm text-gray-600">
+          <a href="#about" class="hover:text-indigo-600">About</a>
+           <a href="#contact" class="hover:text-indigo-600">Experience</a>
+          <a href="#projects" class="hover:text-indigo-600">Projects</a>
+          <a href="#skills" class="hover:text-indigo-600">Skills</a>
+          <a href="#education" class="hover:text-indigo-600">Education</a>
+          <a href="#contact" class="hover:text-indigo-600">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-12">
+      <!-- About -->
+      <section id="about" class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-4xl font-extrabold leading-tight">Hi — I'm {{ profile.name }}.</h2>
+          <p class="mt-4 text-gray-700 text-lg">
+            {{ profile.intro }}
+          </p>
+
+          <div class="mt-6 flex gap-3">
+            <!-- resume.pdf should live in static/resume.pdf -->
+            <a href="{{ url_for('static', filename='resume.pdf') }}" class="inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700">Download Resume</a>
+            <a href="#projects" class="inline-block px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50">View Projects</a>
+          </div>
+
+          <div class="mt-6 text-sm text-gray-600 space-y-1">
+            <div><strong>Email:</strong> <a class="text-indigo-600" href="mailto:{{ profile.email }}">{{ profile.email }}</a></div>
+            <div><strong>Phone:</strong> <a class="text-indigo-600" href="tel:{{ profile.phone }}">{{ profile.phone }}</a></div>
+            <div><strong>Location:</strong> {{ profile.location }}</div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-indigo-50 to-white rounded-2xl p-8 shadow-sm">
+          <div class="text-sm text-gray-600">Current Role</div>
+          <div class="mt-2 text-lg font-semibold">Machine Learning Engineer — Samsung R&amp;D</div>
+          <div class="mt-3 text-gray-700">Working on multimodal retrieval-augmented generation (RAG) systems with Gemmeni Live — focusing on model integration, vector search, and production pipelines.</div>
+
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <div class="p-4 bg-white rounded-lg border text-center">
+              <div class="text-xs text-gray-500">Experience</div>
+              <div class="text-xl font-semibold">{{ profile.experience_years }}</div>
+            </div>
+            <div class="p-4 bg-white rounded-lg border text-center">
+              <div class="text-xs text-gray-500">Specialty</div>
+              <div class="text-xl font-semibold">{{ profile.specialty }}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section id="skills" class="mt-12">
+        <h3 class="text-2xl font-semibold">Skills</h3>
+        <p class="text-gray-600 mt-2">Tools & technologies I use daily:</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {% for s in skills %}
+            <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm border">{{ s }}</span>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section id="projects" class="mt-12">
+        <h3 class="text-2xl font-semibold">ML / AI Projects</h3>
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          {% for p in projects %}
+            <article class="p-6 bg-white rounded-lg shadow-sm border">
+              <h4 class="font-semibold">{{ p.title }}</h4>
+              <p class="mt-2 text-sm text-gray-600">{{ p.desc }}</p>
+              <div class="mt-4 text-xs text-gray-500">Stack: {{ p.stack }}</div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Education -->
+      <section id="education" class="mt-12">
+        <h3 class="text-2xl font-semibold">Education</h3>
+        <div class="mt-4 p-6 bg-white rounded-lg border shadow-sm">
+          <div class="font-semibold">{{ education.degree }}</div>
+          <div class="mt-1 text-sm text-gray-600">{{ education.detail }}</div>
+        </div>
+      </section>
+
+      <!-- Certifications (now with images) -->
+      <section id="certifications" class="mt-12">
+  <h3 class="text-2xl font-semibold">Certifications</h3>
+  <p class="text-gray-600 mt-2">Click the header to expand/collapse certificates. Click a thumbnail to view the full certificate inline.</p>
+
+  <!-- Accordion header -->
+  <button id="cert-toggle" aria-expanded="false"
+    class="mt-4 w-full flex items-center justify-between p-4 bg-white rounded-lg border shadow-sm hover:bg-gray-50 focus:outline-none">
+    <div class="flex items-center gap-3">
+      <svg id="chev" class="w-5 h-5 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+      <span class="font-medium">Show / Hide certificates</span>
+    </div>
+    <span class="text-sm text-gray-500">{{ certifications|length }} items</span>
+  </button>
+
+  <!-- Accordion content (hidden by default) -->
+  <div id="cert-list" class="mt-4 hidden">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {% for c in certifications %}
+        <div class="bg-white rounded-lg border shadow-sm overflow-hidden">
+          {% if c.image %}
+            <!-- Thumbnail opens modal and passes PDF path -->
+            <button
+              class="w-full text-left"
+              data-pdf="{{ url_for('static', filename='certs/' + (c.pdf or '') ) }}"
+              aria-label="Open {{ c.title }}"
+              onclick="openCertModal(this)"
+            >
+              <img src="{{ url_for('static', filename='certs/' + c.image) }}"
+                   alt="{{ c.title }}"
+                   class="w-full h-40 object-contain bg-gray-50" />
+            </button>
+          {% else %}
+            <div class="h-40 flex items-center justify-center text-gray-500">No image</div>
+          {% endif %}
+
+          <div class="p-3">
+            <div class="text-sm font-medium">{{ c.title }}</div>
+            <div class="mt-2 text-xs text-gray-500">Click thumbnail to view</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Modal (hidden) -->
+<div id="cert-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-60 p-4">
+  <div class="bg-white w-full max-w-4xl h-[80vh] rounded-lg overflow-hidden shadow-lg relative">
+    <button id="cert-modal-close" class="absolute top-3 right-3 z-10 bg-white rounded-full p-2 shadow hover:bg-gray-100" aria-label="Close certificate">
+      <!-- X icon -->
+      <svg class="w-5 h-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- iframe for PDF preview -->
+    <iframe id="cert-iframe" src="" class="w-full h-full border-0" title="Certificate preview"></iframe>
+  </div>
+</div>
+
+      <!-- Contact -->
+      <section id="contact" class="mt-12">
+        <h3 class="text-2xl font-semibold">Contact</h3>
+        <div class="mt-6 grid md:grid-cols-2 gap-8">
+          <div class="p-6 bg-white rounded-lg border shadow-sm">
+            <h4 class="font-semibold">Get in touch</h4>
+            <p class="mt-2 text-gray-600">Email me at <a class="text-indigo-600" href="mailto:{{ profile.email }}">{{ profile.email }}</a> <br>  call <a class="text-indigo-600" href="tel:{{ profile.phone }}">{{ profile.phone }}</a>.</p>
+
+            <div class="mt-6">
+              <strong class="text-sm text-gray-500">Follow</strong>
+              <div class="mt-2 flex gap-3">
+                <a class="text-sm text-indigo-600" href="https://github.com/mayank61">GitHub</a>
+                <a class="text-sm text-indigo-600" href="https://www.linkedin.com/in/mayank-teli-b906431b1/">LinkedIn</a>
+              </div>
+            </div>
+          </div>
+
+          <form action="{{ url_for('contact') }}" method="post" class="p-6 bg-white rounded-lg border shadow-sm">
+            <label class="block text-sm font-medium text-gray-700">Name</label>
+            <input name="name" class="mt-1 block w-full rounded-md border-gray-200 shadow-sm p-2" placeholder="Your name" />
+
+            <label class="block text-sm font-medium text-gray-700 mt-4">Message</label>
+            <textarea name="message" rows="5" class="mt-1 block w-full rounded-md border-gray-200 shadow-sm p-2" placeholder="Hi Mayank — I'm interested in..."></textarea>
+
+            <button type="submit" class="mt-4 inline-block px-4 py-2 bg-indigo-600 text-white rounded-lg">Send Email</button>
+          </form>
+        </div>
+      </section>
+
+      <footer class="mt-12 border-t pt-6 text-sm text-gray-500 text-center">© {{ year }} {{ profile.name }} — Built with ❤️</footer>
+    </main>
+    <script>
+  // Accordion toggle
+  const certToggle = document.getElementById('cert-toggle');
+  const certList = document.getElementById('cert-list');
+  const chev = document.getElementById('chev');
+
+  certToggle.addEventListener('click', () => {
+    const expanded = certToggle.getAttribute('aria-expanded') === 'true';
+    certToggle.setAttribute('aria-expanded', String(!expanded));
+    certList.classList.toggle('hidden');
+    chev.classList.toggle('rotate-180');
+    // Smooth scroll into view when opening
+    if (!expanded) {
+      setTimeout(() => certList.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+    }
+  });
+
+  // Modal open/close handlers
+  const certModal = document.getElementById('cert-modal');
+  const certIframe = document.getElementById('cert-iframe');
+  const certModalClose = document.getElementById('cert-modal-close');
+
+  function openCertModal(button) {
+    const pdf = button.getAttribute('data-pdf');
+    if (!pdf) return;
+    certIframe.src = pdf;
+    certModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // prevent background scroll
+  }
+
+  function closeCertModal() {
+    certModal.classList.add('hidden');
+    certIframe.src = '';
+    document.body.style.overflow = ''; // restore scroll
+  }
+
+  certModalClose.addEventListener('click', closeCertModal);
+
+  // Close modal on overlay click (but not when clicking inside the dialog)
+  certModal.addEventListener('click', (e) => {
+    if (e.target === certModal) closeCertModal();
+  });
+
+  // Close modal on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !certModal.classList.contains('hidden')) closeCertModal();
+  });
+</script>
+
+  </body>
+</html>
