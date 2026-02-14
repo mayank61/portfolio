@@ -13,7 +13,7 @@ PROFILE = {
     "location": "Bangalore, India",
     "intro": "Machine Learning Engineer at Samsung R&D, Bangalore. Currently building multimodal RAG systems with Gemini live. I design, train, and deploy ML systems end-to-end.",
     "experience_years": "2+ years",
-    "specialty": "Multimodal ML",
+    "specialty": "Computer vision,NLP",
 }
 
 SKILLS = ["PyTorch", "NumPy", "TensorFlow", "Python", "Java", "Docker", "Git", "SQL","Linux","GenAI","Flask","FastAPI","Hugging Face","LangChain","Vector Databases","MLOps"]
